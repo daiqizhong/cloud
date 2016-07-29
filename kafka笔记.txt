@@ -1,0 +1,228 @@
+kafka删除topic方法
+1) kafka-topics.sh --delete --zookeeper host:port --topic topicname
+2) 删除kafka存储目录（server.properties文件log.dirs配置，默认为"/tmp/kafka-logs"）相关topic目录删除zookeeper "/brokers/topics/"目录下相关topic节点
+
+启动kafka
+bin/kafka-server-start.sh config/server.properties &
+
+启动生产者
+bin/kafka-console-producer.sh --broker-list s1:9092 --topic mykafka
+
+启动kafka消费者
+bin/kafka-console-consumer.sh --zookeeper s1:2181 --topic kafkaToptic --from-beginning
+
+创建topic
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic mykafka 
+
+查看topic
+bin/kafka-topics.sh --list --zookeeper s1:2181
+
+查看详细信息
+bin/kafka-topics.sh --describe --zookeeper s1:2181 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+问题及解决方案
+一、
+6272 [Thread-19-worker-receiver-thread-0] INFO  backtype.storm.messaging.loader - Starting receive-thread: [stormId: special-topology-1-1467104365, port: 1027, thread-id: 0 ]
+21208 [Thread-12-spout] ERROR org.apache.curator.ConnectionState - Connection timed out for connection string (s1:2181) and timeout (15000) / elapsed (15013)
+org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+	at org.apache.curator.ConnectionState.checkTimeouts(ConnectionState.java:198) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.ConnectionState.getZooKeeper(ConnectionState.java:88) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.CuratorZookeeperClient.getZooKeeper(CuratorZookeeperClient.java:113) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.CuratorFrameworkImpl.getZooKeeper(CuratorFrameworkImpl.java:457) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38) [curator-framework-2.4.0.jar:na]
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:63) [classes/:na]
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:40) [classes/:na]
+	at storm.kafka.trident.ZkBrokerReader.<init>(ZkBrokerReader.java:24) [classes/:na]
+	at storm.kafka.KafkaUtils.makeBrokerReader(KafkaUtils.java:37) [classes/:na]
+	at storm.kafka.KafkaSpout.open(KafkaSpout.java:70) [classes/:na]
+	at backtype.storm.daemon.executor$fn__3284$fn__3299.invoke(executor.clj:520) [storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:429) [storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at clojure.lang.AFn.run(AFn.java:24) [clojure-1.5.1.jar:na]
+	at java.lang.Thread.run(Thread.java:745) [na:1.7.0_80]
+21223 [Thread-14-spout] ERROR org.apache.curator.ConnectionState - Connection timed out for connection string (s1:2181) and timeout (15000) / elapsed (15013)
+org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+	at org.apache.curator.ConnectionState.checkTimeouts(ConnectionState.java:198) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.ConnectionState.getZooKeeper(ConnectionState.java:88) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.CuratorZookeeperClient.getZooKeeper(CuratorZookeeperClient.java:113) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.CuratorFrameworkImpl.getZooKeeper(CuratorFrameworkImpl.java:457) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107) [curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191) [curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38) [curator-framework-2.4.0.jar:na]
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:63) [classes/:na]
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:40) [classes/:na]
+	at storm.kafka.trident.ZkBrokerReader.<init>(ZkBrokerReader.java:24) [classes/:na]
+	at storm.kafka.KafkaUtils.makeBrokerReader(KafkaUtils.java:37) [classes/:na]
+	at storm.kafka.KafkaSpout.open(KafkaSpout.java:70) [classes/:na]
+	at backtype.storm.daemon.executor$fn__3284$fn__3299.invoke(executor.clj:520) [storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:429) [storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at clojure.lang.AFn.run(AFn.java:24) [clojure-1.5.1.jar:na]
+	at java.lang.Thread.run(Thread.java:745) [na:1.7.0_80]
+
+
+二、
+[2016-06-28 16:57:46,197] ERROR fetching topic metadata for topics [Set(order)] from broker [ArrayBuffer(id:0,host:192.168.102.131,port:9092)] failed (kafka.utils.Utils$:106)
+kafka.common.KafkaException: fetching topic metadata for topics [Set(order)] from broker [ArrayBuffer(id:0,host:192.168.102.131,port:9092)] failed
+	at kafka.client.ClientUtils$.fetchTopicMetadata(ClientUtils.scala:72)
+	at kafka.producer.BrokerPartitionInfo.updateInfo(BrokerPartitionInfo.scala:82)
+	at kafka.producer.async.DefaultEventHandler$$anonfun$handle$1.apply$mcV$sp(DefaultEventHandler.scala:67)
+	at kafka.utils.Utils$.swallow(Utils.scala:172)
+	at kafka.utils.Logging$class.swallowError(Logging.scala:106)
+	at kafka.utils.Utils$.swallowError(Utils.scala:45)
+	at kafka.producer.async.DefaultEventHandler.handle(DefaultEventHandler.scala:67)
+	at kafka.producer.async.ProducerSendThread.tryToHandle(ProducerSendThread.scala:105)
+	at kafka.producer.async.ProducerSendThread.processEvents(ProducerSendThread.scala:94)
+	at kafka.producer.async.ProducerSendThread.run(ProducerSendThread.scala:45)
+Caused by: java.nio.channels.ClosedChannelException
+	at kafka.network.BlockingChannel.send(BlockingChannel.scala:100)
+	at kafka.producer.SyncProducer.liftedTree1$1(SyncProducer.scala:73)
+	at kafka.producer.SyncProducer.kafka$producer$SyncProducer$$doSend(SyncProducer.scala:72)
+	at kafka.producer.SyncProducer.send(SyncProducer.scala:113)
+	at kafka.client.ClientUtils$.fetchTopicMetadata(ClientUtils.scala:58)
+	... 9 more
+出现该问题的原因是因为kafka主机防火墙
+
+
+三、
+6158 [ConnectionStateManager-0] WARN  org.apache.curator.framework.state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+6160 [Thread-12-spout] ERROR backtype.storm.util - Async loop died!
+java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:54) ~[classes/:na]
+	at storm.kafka.trident.ZkBrokerReader.<init>(ZkBrokerReader.java:24) ~[classes/:na]
+	at storm.kafka.KafkaUtils.makeBrokerReader(KafkaUtils.java:37) ~[classes/:na]
+	at storm.kafka.KafkaSpout.open(KafkaSpout.java:70) ~[classes/:na]
+	at backtype.storm.daemon.executor$fn__3284$fn__3299.invoke(executor.clj:520) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:429) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at clojure.lang.AFn.run(AFn.java:24) [clojure-1.5.1.jar:na]
+	at java.lang.Thread.run(Thread.java:745) [na:1.7.0_80]
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:66) ~[classes/:na]
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:40) ~[classes/:na]
+	... 7 common frames omitted
+Caused by: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:111) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1586) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107) ~[curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38) ~[curator-framework-2.4.0.jar:na]
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:63) ~[classes/:na]
+	... 8 common frames omitted
+6160 [Thread-4] INFO  backtype.storm.daemon.executor - Loading executor __system:[-1 -1]
+6161 [Thread-12-spout] ERROR backtype.storm.daemon.executor - 
+java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:54) ~[classes/:na]
+	at storm.kafka.trident.ZkBrokerReader.<init>(ZkBrokerReader.java:24) ~[classes/:na]
+	at storm.kafka.KafkaUtils.makeBrokerReader(KafkaUtils.java:37) ~[classes/:na]
+	at storm.kafka.KafkaSpout.open(KafkaSpout.java:70) ~[classes/:na]
+	at backtype.storm.daemon.executor$fn__3284$fn__3299.invoke(executor.clj:520) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:429) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at clojure.lang.AFn.run(AFn.java:24) [clojure-1.5.1.jar:na]
+	at java.lang.Thread.run(Thread.java:745) [na:1.7.0_80]
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:66) ~[classes/:na]
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:40) ~[classes/:na]
+	... 7 common frames omitted
+Caused by: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:111) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1586) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107) ~[curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38) ~[curator-framework-2.4.0.jar:na]
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:63) ~[classes/:na]
+	... 8 common frames omitted
+6161 [Thread-4] INFO  backtype.storm.daemon.task - Emitting: __system __system ["startup"]
+6162 [Thread-4] INFO  backtype.storm.daemon.executor - Loaded executor tasks __system:[-1 -1]
+6170 [Thread-14-spout-EventThread] INFO  org.apache.curator.framework.state.ConnectionStateManager - State change: CONNECTED
+6171 [Thread-4] INFO  backtype.storm.daemon.executor - Finished loading executor __system:[-1 -1]
+6171 [ConnectionStateManager-0] WARN  org.apache.curator.framework.state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+6171 [Thread-16-__system] INFO  backtype.storm.daemon.executor - Preparing bolt __system:(-1)
+6180 [Thread-16-__system] INFO  backtype.storm.daemon.executor - Prepared bolt __system:(-1)
+6188 [Thread-14-spout] ERROR backtype.storm.util - Async loop died!
+java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:54) ~[classes/:na]
+	at storm.kafka.trident.ZkBrokerReader.<init>(ZkBrokerReader.java:24) ~[classes/:na]
+	at storm.kafka.KafkaUtils.makeBrokerReader(KafkaUtils.java:37) ~[classes/:na]
+	at storm.kafka.KafkaSpout.open(KafkaSpout.java:70) ~[classes/:na]
+	at backtype.storm.daemon.executor$fn__3284$fn__3299.invoke(executor.clj:520) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:429) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at clojure.lang.AFn.run(AFn.java:24) [clojure-1.5.1.jar:na]
+	at java.lang.Thread.run(Thread.java:745) [na:1.7.0_80]
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:66) ~[classes/:na]
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:40) ~[classes/:na]
+	... 7 common frames omitted
+Caused by: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:111) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1586) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107) ~[curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38) ~[curator-framework-2.4.0.jar:na]
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:63) ~[classes/:na]
+	... 8 common frames omitted
+6189 [Thread-14-spout] ERROR backtype.storm.daemon.executor - 
+java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:54) ~[classes/:na]
+	at storm.kafka.trident.ZkBrokerReader.<init>(ZkBrokerReader.java:24) ~[classes/:na]
+	at storm.kafka.KafkaUtils.makeBrokerReader(KafkaUtils.java:37) ~[classes/:na]
+	at storm.kafka.KafkaSpout.open(KafkaSpout.java:70) ~[classes/:na]
+	at backtype.storm.daemon.executor$fn__3284$fn__3299.invoke(executor.clj:520) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:429) ~[storm-core-0.9.2-incubating.jar:0.9.2-incubating]
+	at clojure.lang.AFn.run(AFn.java:24) [clojure-1.5.1.jar:na]
+	at java.lang.Thread.run(Thread.java:745) [na:1.7.0_80]
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:66) ~[classes/:na]
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:40) ~[classes/:na]
+	... 7 common frames omitted
+Caused by: org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /brokers/topics/order1/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:111) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1586) ~[zookeeper-3.4.5.jar:3.4.5-1392090]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107) ~[curator-client-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191) ~[curator-framework-2.4.0.jar:na]
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38) ~[curator-framework-2.4.0.jar:na]
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:63) ~[classes/:na]
+	... 8 common frames omitted
+6213 [Thread-12-spout] INFO  backtype.storm.util - Halting process: ("Worker died")
+6213 [Thread-14-spout] INFO  backtype.storm.util - Halting process: ("Worker died")
+
+出现该问题的原因是，topic在zookeeper 未创建

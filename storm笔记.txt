@@ -1,0 +1,83 @@
+虾皮：http://www.docin.com/p-1291436526.html
+Jstrom:https://github.com/alibaba/jstorm/wiki/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85
+
+http://www.ixirong.com/2015/05/12/how-to-install-jstorm-cluster/
+
+开启root账户
+
+sudo passwd root
+输入当前账户密码
+输入root密码
+
+centos启用root账户
+su 回车 输入当前账户密码
+
+查看ssh是否启动
+netstat -nat | grep 22
+
+安装ssh
+sudo apt-get install openssh-server
+
+下载zookeeper
+wget http://apache.fayea.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
+
+tar xzvf zookeeper-3.4.6.tar.gz
+mv zookeeper-3.4.6.tar.gz zookeeper
+
+cp conf/zoo_sample.cfg conf/zoo.cfg
+
+vi conf/zoo.cfg
+#心跳时间
+tickTime=2000
+initLimit=10
+syncLimit=5
+#数据保存目录
+dataDir=/usr/local/storm/zookeeper/data
+#客户端连接端口
+clientPort=2181
+
+server.1=10.0.30.138:2888:3888
+server.2=10.0.30.139:2888:3888
+
+增加myid文件
+并在data目录下放置myid文件：(上面zoo.cfg中的dataDir)
+mkdir data
+echo 1 >> myid
+
+
+#安装ZMQ 2.1.7
+wget http://download.zeromq.org/zeromq-2.1.7.tar.gz
+tar -xzf zeromq-2.1.7.tar.gz
+cd zeromq-2.1.7
+./configure
+make
+sudo make install
+
+#如果安装过程报错uuid找不到，则通过如下的包安装uuid库：
+sudo yum install e2fsprogsl  -b current
+sudo yum install e2fsprogs-devel  -b current
+
+
+#安装JZMQ
+git clone https://github.com/nathanmarz/jzmq.git
+cd jzmq
+./autogen.sh
+./configure
+make
+sudo make install
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Caused by: java.lang.ClassNotFoundException: kafka.api.OffsetRequest
+打包时，把依赖的jar 包含进去

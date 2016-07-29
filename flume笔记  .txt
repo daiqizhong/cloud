@@ -1,0 +1,75 @@
+https://segmentfault.com/a/1190000002532284
+
+SSH远程登录失败，提示“Password authentication failed”
+
+使用SecureCRT登陆，提示“Password authentication failed”
+
+使用linux下ssh登陆，提示“Permission denied, please try again.”
+
+网上收集的相关资料：
+
+方法一：
+
+1. vi服务器端的/etc/ssh/sshd_config
+
+2. 把PasswordAuthentication设成yes
+
+3. 重启ssh服务
+
+方法二：
+
+1.vi服务器端的/etc/ssh/sshd_config
+
+2.找到#PermitRootLogin no将其修改为PermitRootLogin yes
+
+方法三：
+
+1.查看sshd是否正确在运行
+
+   netstat -anp | grep sshd  
+
+2.如果没有运行使用 service sshd restart 重启服务
+
+方法四：
+
+1.客户端使用 ssh -v root@192.168.0.120 查看登陆信息
+
+2.提示“Permission denied, please try again.”
+
+3.查看防火墙
+
+  #/etc/init.d/iptables status
+
+  如果22端口被限制则无法登陆。
+
+  放开端口22
+
+ #/sbin/iptables -I INPUT -p tcp –dport 22 -j ACCEPT
+
+ #/etc/rc.d/init.d/iptables save
+
+Trying 192.168.102.131...
+telnet: connect to address 192.168.102.131: Connection refused
+
+请查看是否开启改ip的监听 netstat -nat
+
+
+
+
+ 用户列表文件：/etc/passwd
+用户组列表文件：/etc/group
+
+查看系统中有哪些用户：cut -d : -f 1 /etc/passwd
+查看可以登录系统的用户：cat /etc/passwd | grep -v /sbin/nologin | cut -d : -f 1
+查看用户操作：w命令(需要root权限)
+查看某一用户：w 用户名
+查看登录用户：who
+查看用户登录历史记录：last
+
+
+#安装
+wget http://archive.apache.org/dist/flume/stable/apache-flume-1.6.0-bin.tar.gz
+
+
+启动agent
+bin/flume-ng agent -c conf -f conf/flume-tcp.conf -n a1 -Dflume.root.logger=ERROR,console
