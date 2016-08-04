@@ -72,7 +72,9 @@ sudo make install
 
 
 
-
+Exception in thread "main" java.lang.IllegalArgumentException: Field supervisor.slots.ports must be an Iterable of java.lang.Number
+原因是：supervisor.slots.port:
+横岗与端口号要有空格
 
 
 
